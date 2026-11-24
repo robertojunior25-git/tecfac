@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TECFACFLIX — Material de Estudo 2026 | 1º DS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #141414;
+      --bg-secondary: #181818;
+      --bg-card: #222222;
+      --accent-red: #e50914;
+      --accent-red-hover: #f40612;
+      --text-primary: #ffffff;
+      --text-secondary: #b3b3b3;
+      --text-muted: #777777;
+      --badge-green: #46d369;
+      --border-subtle: rgba(255, 255, 255, 0.14);
+      --transition-smooth: all 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      padding: 0 4%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 10%, transparent);
+      transition: background-color 0.35s ease;
+    }
+
+    .navbar.scrolled {
+      background-color: #141414;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.65);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.15rem;
+      letter-spacing: 2px;
+      color: var(--accent-red);
+      text-shadow: 0 2px 10px rgba(229, 9, 20, 0.35);
+      line-height: 1;
+    }
+
+    .brand-badge {
+      background: rgba(229, 9, 20, 0.18);
+      border: 1px solid rgba(229, 9, 20, 0.5);
+      color: #ff6b72;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #e5e5e5;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 4px;
+      padding: 5px 10px;
+      transition: border-color 0.2s, width 0.3s;
+    }
+
+    .search-box:focus-within {
+      border-color: #ffffff;
+      background: #000000;
+    }
+
+    .search-box svg {
+      width: 16px;
+      height: 16px;
+      fill: #cccccc;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 0.85rem;
+      width: 175px;
+    }
+
+    .search-box input::placeholder {
+      color: #888888;
+    }
+
+    .clear-search {
+      background: none;
+      border: none;
+      color: #aaaaaa;
+      cursor: pointer;
+      font-size: 1rem;
+      display: none;
+      padding-left: 4px;
+    }
+
+    .clear-search.visible {
+      display: inline;
+    }
+
+    .profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .profile-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #e50914, #831010);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+
+    .profile-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e5e5e5;
+    }
+
+    /* HERO BANNER */
+    .hero {
+      position: relative;
+      min-height: 78vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 120px 4% 70px;
+      background:
+        linear-gradient(90deg, rgba(20, 20, 20, 0.96) 0%, rgba(20, 20, 20, 0.72) 52%, rgba(20, 20, 20, 0.25) 100%),
+        linear-gradient(0deg, #141414 4%, rgba(20, 20, 20, 0.2) 45%, rgba(20, 20, 20, 0.7) 100%),
+        url('https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000772-0280302805/imagem_html_css_javascript.png') center/cover no-repeat;
+    }
+
+    .hero-content {
+      max-width: 640px;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #e5e5e5;
+    }
+
+    .top10-box {
+      background: var(--accent-red);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.72rem;
+      padding: 3px 6px;
+      border-radius: 3px;
+      line-height: 1.1;
+      text-align: center;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4.2vw, 3.3rem);
+      font-weight: 800;
+      line-height: 1.12;
+      margin-bottom: 14px;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .match-score {
+      color: var(--badge-green);
+      font-weight: 700;
+    }
+
+    .maturity-badge {
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      padding: 1px 6px;
+      font-size: 0.78rem;
+      border-radius: 2px;
+    }
+
+    .hero-desc {
+      color: #dcdcdc;
+      font-size: 1.02rem;
+      margin-bottom: 24px;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 24px;
+      border-radius: 4px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-primary {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    .btn-primary:hover {
+      background-color: rgba(255, 255, 255, 0.78);
+    }
+
+    .btn-secondary {
+      background-color: rgba(109, 109, 110, 0.7);
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(109, 109, 110, 0.45);
+    }
+
+    /* MAIN CATALOG */
+    main {
+      position: relative;
+      z-index: 5;
+      margin-top: -28px;
+      padding-bottom: 60px;
+    }
+
+    /* FILTER PILLS */
+    .filter-bar {
+      padding: 0 4% 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: #e5e5e5;
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .filter-pill.active {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      color: #fff;
+    }
+
+    /* ROWS & CAROUSELS */
+    .row-section {
+      margin-bottom: 34px;
+    }
+
+    .row-section.hidden {
+      display: none;
+    }
+
+    .row-header {
+      padding: 0 4% 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .row-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #e5e5e5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .row-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+    }
+
+    .carousel-track {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      padding: 10px 4% 18px;
+      scrollbar-width: none;
+    }
+
+    .carousel-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 10px;
+      bottom: 18px;
+      width: 44px;
+      background: rgba(20, 20, 20, 0.75);
+      border: none;
+      color: #ffffff;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s;
+    }
+
+    .carousel-wrapper:hover .carousel-btn {
+      opacity: 1;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(20, 20, 20, 0.95);
+    }
+
+    .carousel-btn.prev {
+      left: 0;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+
+    .carousel-btn.next {
+      right: 0;
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    /* CARD */
+    .card {
+      flex: 0 0 255px;
+      background: var(--bg-card);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.06);
+      z-index: 15;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      height: 146px;
+      background: #0d0d0d;
+      overflow: hidden;
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .card:hover .card-thumb {
+      transform: scale(1.04);
+    }
+
+    .card-type-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(4px);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 3px;
+      border-left: 3px solid var(--accent-red);
+      text-transform: uppercase;
+    }
+
+    .card-saved-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: var(--badge-green);
+      color: #000;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: none;
+    }
+
+    .card.in-list .card-saved-dot {
+      display: block;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.6em;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .card-tag {
+      color: var(--badge-green);
+      font-weight: 600;
+    }
+
+    /* SEARCH RESULTS GRID */
+    .search-grid-section {
+      padding: 10px 4% 40px;
+      display: none;
+    }
+
+    .search-grid-section.active {
+      display: block;
+    }
+
+    .search-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+      margin-top: 16px;
+    }
+
+    .search-grid .card {
+      flex: none;
+      width: 100%;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-secondary);
+      width: 100%;
+      max-width: 780px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      position: relative;
+      animation: modalPop 0.25s ease;
+    }
+
+    @keyframes modalPop {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #181818;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-size: 1.25rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+    }
+
+    .modal-hero {
+      position: relative;
+      height: 330px;
+      background: #0b0b0b;
+    }
+
+    .modal-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #0d0d0d;
+    }
+
+    .modal-hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, var(--bg-secondary) 4%, transparent 55%);
+    }
+
+    .modal-body {
+      padding: 0 28px 28px;
+      margin-top: -28px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal-category {
+      color: var(--accent-red);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .modal-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .modal-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    .modal-desc {
+      color: #d6d6d6;
+      font-size: 0.96rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #222222;
+      color: #ffffff;
+      border-left: 4px solid var(--badge-green);
+      padding: 12px 18px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+      z-index: 3000;
+      opacity: 0;
+      transform: translateY(15px);
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 36px 4%;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .search-box input {
+        width: 125px;
+      }
+      .hero {
+        min-height: 68vh;
+        padding-top: 96px;
+      }
+      .card {
+        flex: 0 0 210px;
+      }
+      .modal-hero {
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" id="navbar">
+    <div class="nav-left">
+      <a href="#" class="brand">
+        <span class="brand-logo">TECFACFLIX</span>
+        <span class="brand-badge">1º DS • 2026</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#inicio" class="active">Início</a></li>
+        <li><a href="#row-apostilas">Apostilas & Atividades</a></li>
+        <li><a href="#row-pioneiros">Pioneiros</a></li>
+        <li><a href="#row-projetos">Projetos 1º DS</a></li>
+        <li><a href="#row-guias">Guias & Prompts</a></li>
+        <li><a href="#row-minha-lista">Minha Lista</a></li>
+      </ul>
+    </div>
+
+    <div class="nav-right">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar apostila, aluno..." autocomplete="off" />
+        <button class="clear-search" id="clearSearch" title="Limpar busca">✕</button>
+      </div>
+      <div class="profile-pill" id="profileStatsBtn" title="Ver resumo da Minha Lista">
+        <div class="avatar">DS</div>
+        <span class="profile-label" id="savedCounterLabel">Minha Lista (0)</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span class="top10-box">TOP<br>1</span>
+        <span>Curso Técnico em Desenvolvimento de Sistemas</span>
+      </div>
+      <h1 class="hero-title">Introdução à Computação &amp; Desenvolvimento Web 2026</h1>
+      <div class="hero-meta">
+        <span class="match-score">99% Relevante</span>
+        <span>2026</span>
+        <span class="maturity-badge">LIVRE</span>
+        <span>39 Materiais &amp; Projetos</span>
+        <span>HTML • CSS • JS • GitHub</span>
+      </div>
+      <p class="hero-desc">
+        Explore apostilas completas, roteiros de pesquisa, atividades práticas no VS Code, quizzes interativos, grandes pioneiros da computação e os sites publicados pelos alunos do 1º DS.
+      </p>
+      <div class="hero-buttons">
+        <a href="https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000773-390583905a/O%20que%20s%C3%A3o%20HTML%2C%20CSS%20e%20JavaScript.pdf" target="_blank" rel="noopener" class="btn btn-primary">
+          ▶ Acessar Apostila Web
+        </a>
+        <button class="btn btn-secondary" id="heroMyListBtn">
+          + Minha Lista
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <!-- CATEGORY FILTER BAR -->
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-pill active" data-filter="all">Todos os Materiais</button>
+      <button class="filter-pill" data-filter="apostilas">Apostilas &amp; Atividades</button>
+      <button class="filter-pill" data-filter="pioneiros">Pioneiros da Computação</button>
+      <button class="filter-pill" data-filter="projetos">Projetos da Turma (1º DS)</button>
+      <button class="filter-pill" data-filter="guias">Cheatsheets &amp; Atalhos</button>
+    </div>
+
+    <!-- SEARCH RESULTS SECTION -->
+    <section class="search-grid-section" id="searchSection">
+      <h2 class="row-title">Resultados da busca: <span id="searchTermDisplay" style="color: var(--accent-red);"></span></h2>
+      <div class="search-grid" id="searchGrid"></div>
+    </section>
+
+    <!-- DYNAMIC ROWS CONTAINER -->
+    <div id="catalogContainer">
+      <!-- Minha Lista (Dynamic) -->
+      <section class="row-section hidden" id="row-minha-lista">
+        <div class="row-header">
+          <h2 class="row-title">Minha Lista de Estudos <span class="row-count" id="count-minha-lista">0</span></h2>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('track-minha-lista', -1)">‹</button>
+          <div class="carousel-track" id="track-minha-lista"></div>
+          <button class="carousel-btn next" onclick="scrollCarousel('track-minha-lista', 1)">›</button>
+        </div>
+      </section>
+
+      <!-- Row 1: Apostilas & Atividades -->
+      <section class="row-section" id="row-apostilas" data-category="apostilas">
+        <div class="row-header">
+          <h2 class="row-title">Apostilas &amp; Atividades Essenciais <span class="row-count" id="count-apostilas">13</span></h2>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('track-apostilas', -1)">‹</button>
+          <div class="carousel-track" id="track-apostilas"></div>
+          <button class="carousel-btn next" onclick="scrollCarousel('track-apostilas', 1)">›</button>
+        </div>
+      </section>
+
+      <!-- Row 2: Pioneiros da Computação -->
+      <section class="row-section" id="row-pioneiros" data-category="pioneiros">
+        <div class="row-header">
+          <h2 class="row-title">Pioneiros da Computação <span class="row-count" id="count-pioneiros">4</span></h2>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('track-pioneiros', -1)">‹</button>
+          <div class="carousel-track" id="track-pioneiros"></div>
+          <button class="carousel-btn next" onclick="scrollCarousel('track-pioneiros', 1)">›</button>
+        </div>
+      </section>
+
+      <!-- Row 3: Projetos da Turma 1º DS -->
+      <section class="row-section" id="row-projetos" data-category="projetos">
+        <div class="row-header">
+          <h2 class="row-title">Projetos da Turma — 1º DS (GitHub Pages) <span class="row-count" id="count-projetos">17</span></h2>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('track-projetos', -1)">‹</button>
+          <div class="carousel-track" id="track-projetos"></div>
+          <button class="carousel-btn next" onclick="scrollCarousel('track-projetos', 1)">›</button>
+        </div>
+      </section>
+
+      <!-- Row 4: Guias Visuais, Cheatsheets & Atalhos -->
+      <section class="row-section" id="row-guias" data-category="guias">
+        <div class="row-header">
+          <h2 class="row-title">Guias Visuais, Cheatsheets &amp; Atalhos <span class="row-count" id="count-guias">5</span></h2>
+        </div>
+        <div class="carousel-wrapper">
+          <button class="carousel-btn prev" onclick="scrollCarousel('track-guias', -1)">‹</button>
+          <div class="carousel-track" id="track-guias"></div>
+          <button class="carousel-btn next" onclick="scrollCarousel('track-guias', 1)">›</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-backdrop" id="detailModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="closeModalBtn" aria-label="Fechar">✕</button>
+      <div class="modal-hero">
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-hero-gradient"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-category" id="modalCategory">CATEGORIA</div>
+        <h2 class="modal-title" id="modalTitle">Título do Material</h2>
+        <div class="modal-meta-row">
+          <span class="match-score" id="modalBadge">Material Oficial</span>
+          <span>1º Desenvolvimento de Sistemas</span>
+          <span>2026</span>
+        </div>
+        <p class="modal-desc" id="modalDesc">Descrição detalhada do material.</p>
+        <div class="modal-actions">
+          <a id="modalOpenLink" href="#" target="_blank" rel="noopener" class="btn btn-primary">
+            ▶ Abrir Material / Site
+          </a>
+          <button id="modalToggleListBtn" class="btn btn-secondary">
+            + Adicionar à Minha Lista
+          </button>
+          <button id="modalCopyLinkBtn" class="btn btn-secondary">
+            🔗 Copiar Link
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">Ação realizada!</div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <strong style="color:#e50914;">TECFACFLIX</strong> — Portal de Estudos • Técnico em Desenvolvimento de Sistemas (2026)
+    </div>
+    <div>
+      Fonte original: <a href="https://tecfac.webnode.com.br/material-para-estudo-2026/" target="_blank" rel="noopener">tecfac.webnode.com.br</a>
+    </div>
+  </footer>
+
+  <script>
+    const FALLBACK_IMG = 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000002-07b9e08b41/50000000.png?ph=0fef157bd1';
+
+    const catalogItems = [
+      // APOSTILAS & ATIVIDADES (13)
+      {
+        id: 'ap-1',
+        category: 'apostilas',
+        categoryLabel: 'Apostila PDF',
+        title: '1_ Apostila - Introdução à Computação',
+        tag: 'PDF • Fundamental',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000804-83eff83f01/Imagem_Ábaco_Teclado.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000647-dfb94dfb96/2012_Apostila_FAC_004_05.pdf',
+        description: 'Apostila introdutória abordando os conceitos fundamentais da computação, hardware, software, sistemas de numeração e evolução histórica dos computadores.'
+      },
+      {
+        id: 'ap-1a',
+        category: 'apostilas',
+        categoryLabel: 'Atividade PDF',
+        title: '1a_ Roteiro de Pesquisa: Evolução das Máquinas de Calcular',
+        tag: 'PDF • Pesquisa',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000760-5fdec5fdee/Atividade_ROTEIRO DE PESQUISA_A EVOLUÇÃO DAS MÁQUINAS DE CALCULAR.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000759-0c48f0c490/folha_de_atividades_abaco_pascal_leibniz.pdf',
+        description: 'Folha de atividades guiada sobre o Ábaco, Pascalina, Máquina de Leibniz e os primeiros dispositivos mecânicos de cálculo.'
+      },
+      {
+        id: 'ap-1b',
+        category: 'apostilas',
+        categoryLabel: 'Apostila Web',
+        title: '1b_ Apostila: O que são HTML, CSS e JavaScript',
+        tag: 'PDF • Front-End',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000772-0280302805/imagem_html_css_javascript.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000773-390583905a/O%20que%20s%C3%A3o%20HTML%2C%20CSS%20e%20JavaScript.pdf',
+        description: 'Guia completo explicando a tríade do desenvolvimento web: estrutura semântica com HTML, estilização com CSS e interatividade com JavaScript.'
+      },
+      {
+        id: 'ap-1c',
+        category: 'apostilas',
+        categoryLabel: 'Tutorial GitHub',
+        title: '1c_ Atividade: Entrar no GitHub e publicar um site completo',
+        tag: 'PDF • Deploy',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000763-efe1eefe1f/Entrar no GITHUB.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000762-32af332af6/Publicar%20um%20site%20HTML%2C%20CSS%2C%20JAVASCRIPT%20no%20GITHUB.pdf',
+        description: 'Passo a passo ilustrado para criar conta, configurar repositórios e colocar um site HTML/CSS/JS no ar gratuitamente usando GitHub Pages.'
+      },
+      {
+        id: 'ap-1d',
+        category: 'apostilas',
+        categoryLabel: 'Código Fonte .TXT',
+        title: '1d_ Atividade: Arquivo em .txt para baixar e salvar como .html',
+        tag: 'TXT • Prática',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000744-0a29b0a29e/imagem_IA_JavaScript_Site_Primeiro_Site_sem_acentos.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000743-074e2074e4/Exemplo%20de%20site%20da%20apostila_sem%20acentos.txt',
+        description: 'Modelo inicial de código-fonte em texto puro para testar a criação da primeira página web local no navegador.'
+      },
+      {
+        id: 'ap-1e',
+        category: 'apostilas',
+        categoryLabel: 'Exemplo VS Code',
+        title: '1e_ Exemplo prático no VS Code: Integração HTML, CSS e JS (PDF)',
+        tag: 'PDF • VS Code',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000765-5ab7b5ab7e/VSCode_exemplo_prático.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000764-4c3904c392/Exemplo%20em%20html%20de%20uma%20p%C3%A1gina%20que%20usa%20os%203%20elementos%20HTML%2C%20CSS%20e%20Javascript%20explicando%20o%20que%20cada%20um%20faz.pdf',
+        description: 'Demonstração comentada linha por linha mostrando como HTML, CSS e JavaScript trabalham juntos dentro do Visual Studio Code.'
+      },
+      {
+        id: 'ap-1f',
+        category: 'apostilas',
+        categoryLabel: 'Pacote ZIP',
+        title: '1f_ Exemplo prático VS Code em .txt/.zip para editor de texto',
+        tag: 'ZIP • Código',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000766-c80b5c80b7/VSCode_exemplo_prático_em_.txt.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000771-20d8920d8a/Exemplo%20simples%20do%20uso%20e%20intera%C3%A7%C3%A3o%20dos%203%20elementos_2.zip',
+        description: 'Arquivos prontos compactados para abrir no editor de código, estudar a interação entre as três linguagens e modificar livremente.'
+      },
+      {
+        id: 'ap-1g',
+        category: 'apostilas',
+        categoryLabel: 'Quiz Interativo',
+        title: '1g_ Atividade: Quiz sobre HTML, CSS e JavaScript',
+        tag: 'Quiz • Avaliação',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000768-4b2354b237/image_Quiz_HTML_CSS_JS.png',
+        link: 'https://wayground.com/join?c=vMvJQlDM8wUXQQ2t-LZXNidyqUnigA4cha9DOObasP-xFIv_1R08PSmQQ_JEF6KYmsmLpVL6yrxqXRSVGQB3bz7wCPA3z_a3DwJWSzXk2NdLyH7UczHXQzuM6EVQqZUMJ6mxRwrQfIZiprA0XAWE9DZ4nFNt_1Ycx7cL9ifiBkCKu_wSnu48jvTqqHcU5ZgTRCDsrnE_J0pRActBho4aQGHbYDWOMAKsyFKb3WiY910X5wxSWnLLn7n8bHVnLXCI-W7w8MBt.1eNp3DRxLBuOy2DRG58XBA.uRKy8liWRAS3JUeM&linktype=web',
+        description: 'Desafio interativo online para testar seus conhecimentos sobre tags HTML, propriedades CSS e lógica JavaScript.'
+      },
+      {
+        id: 'ap-1h',
+        category: 'apostilas',
+        categoryLabel: 'Roteiro IA',
+        title: '1h_ Atividade: Prompt de IA — História da Informática',
+        tag: 'PDF • IA Generativa',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000792-1ca0c1ca0f/Imagem_Atividade_IA_Prompt_História_da_Informática.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000790-e832ee832f/Explicando%20a%20Atividade%20IA%20Prompt%20Hist%C3%B3ria%20da%20Inform%C3%A1tica.pdf',
+        description: 'Instruções detalhadas de como utilizar prompts estruturados com Inteligência Artificial para desenvolver sites educacionais.'
+      },
+      {
+        id: 'ap-1i',
+        category: 'apostilas',
+        categoryLabel: 'Site Modelo',
+        title: '1i_ Atividade Exemplo: História da Informática (1º DS)',
+        tag: 'Web • Modelo',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000777-afbe8afbea/Imagem_Pag_1DS_Evolucao.png',
+        link: 'https://robertojunior25-git.github.io/1DS_historia_informatica/',
+        description: 'Página modelo publicada no GitHub Pages servindo de referência visual e estrutural para os projetos da turma.'
+      },
+      {
+        id: 'ap-1j',
+        category: 'apostilas',
+        categoryLabel: 'Cards Interativos',
+        title: '1j_ Atividade: GitHub — Como navegar e trabalhar no GitHub',
+        tag: 'Web • Guia Visual',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000794-6757067571/Imagem_GitHub_Como_Funciona.png',
+        link: 'https://robertojunior25-git.github.io/1DS_cards_Trabalhar_com_GitHub/',
+        description: 'Aplicação interativa em cards explicando repositórios, commits, branches e fluxo de trabalho no GitHub.'
+      },
+      {
+        id: 'ap-1k',
+        category: 'apostilas',
+        categoryLabel: 'App Interativo',
+        title: '1k_ Atividade: Site Quiz Interativo 1º DS',
+        tag: 'Web • Projeto',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000769-4ef5b4ef5c/site_quiz_carros.png',
+        link: 'https://robertojunior25-git.github.io/1DS_quiz/',
+        description: 'Exemplo prático de quiz dinâmico desenvolvido com HTML, CSS e JavaScript hospedado no GitHub Pages.'
+      },
+      {
+        id: 'ap-1l',
+        category: 'apostilas',
+        categoryLabel: 'Livro Digital',
+        title: '1l_ Material Complementar: Livro Git e GitHub',
+        tag: 'Livro • Referência',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000795-d4366d4368/Livro_ Git e GitHub.png',
+        link: 'https://share.gemini.google/ulvlgqpIVZCN',
+        description: 'Material de leitura aprofundado sobre controle de versão com Git e colaboração de projetos no GitHub.'
+      },
+
+      // PIONEIROS DA COMPUTAÇÃO (4)
+      {
+        id: 'pio-1',
+        category: 'pioneiros',
+        categoryLabel: 'Pioneiro da Web',
+        title: 'Tim Berners-Lee — Criador do HTML, HTTP e World Wide Web',
+        tag: 'WWW • HTML',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000847-c350ac350d/Imagem_TimBerners-Lee-HTML-WWW.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000851-75d6e75d70/Imagem_TimBerners-Lee-HTML-WWW.png',
+        description: 'Cientista da computação britânico que inventou a World Wide Web em 1989, criando o protocolo HTTP, a linguagem HTML e o primeiro navegador web.'
+      },
+      {
+        id: 'pio-2',
+        category: 'pioneiros',
+        categoryLabel: 'Ciência da Computação Brasil',
+        title: 'Fabíola Greve — Pesquisa e Sistemas Distribuídos',
+        tag: 'Brasil • Academia',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000857-94b7d94b80/Imagem_FabiolaGreve.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000856-efa14efa16/Imagem_FabiolaGreve.png',
+        description: 'Destaque brasileiro na pesquisa em Ciência da Computação, com contribuições relevantes em sistemas distribuídos, tolerância a falhas e redes.'
+      },
+      {
+        id: 'pio-3',
+        category: 'pioneiros',
+        categoryLabel: 'Open Source',
+        title: 'Linus Torvalds — Criador do Kernel Linux e do Git',
+        tag: 'Linux • Git',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000848-b8de5b8de7/Imagem_LinusTorvalds.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000850-5e47e5e481/Imagem_LinusTorvalds.png',
+        description: 'Engenheiro de software finlandês criador do núcleo Linux, base da infraestrutura moderna da internet, e do sistema de controle de versão Git.'
+      },
+      {
+        id: 'pio-4',
+        category: 'pioneiros',
+        categoryLabel: 'Linguagens de Programação',
+        title: 'Guido van Rossum — Criador da Linguagem Python',
+        tag: 'Python • Software',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000858-6d7366d738/Imagem_GuidovanRossun_1.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000859-35fd435fd6/Imagem_GuidovanRossun_1.png',
+        description: 'Programador holandês criador do Python, uma das linguagens mais populares do mundo para desenvolvimento web, ciência de dados e Inteligência Artificial.'
+      },
+
+      // PROJETOS DA TURMA 1º DS (17)
+      {
+        id: 'proj-1',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Felipe Oliveira Silva — Introdução à Computação',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000796-bbaffbbb01/Imagem_1DS_Ativid_Evolucao_Informatica_Felipe_O_S.png',
+        link: 'https://felipeoliveirasilva21-del.github.io/Intro_Comput/',
+        description: 'Site desenvolvido por Felipe Oliveira Silva (1º DS) sobre a História e Evolução da Informática utilizando IA, HTML, CSS e JavaScript.'
+      },
+      {
+        id: 'proj-2',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Rafael M. D. A. — História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000798-5544255444/Imagem_1DS_Ativid_Evolucao_Informatica_Rafael_M_D_A.png',
+        link: 'https://raugusto1984.github.io/informaticahistoria/',
+        description: 'Projeto publicado por Rafael M. D. A. explorando os principais marcos da computação e seus inventores.'
+      },
+      {
+        id: 'proj-3',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluna • 1º DS',
+        title: 'Adriana S. P. — Evolução do Computador',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000797-6e4e66e4e8/Imagem_1DS_Ativid_Evolucao_Informatica_Adriana_S_P.png',
+        link: 'https://adrianasantanapessoal-oss.github.io/Atividade-Evolucao-do-Computador/',
+        description: 'Página interativa desenvolvida por Adriana S. P. apresentando a linha do tempo da evolução dos computadores.'
+      },
+      {
+        id: 'proj-4',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Fabrício Alves de Morais — História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000800-7f5257f527/Imagem_1DS_Atividade_IA_FabricioAlvesdeMorais.png',
+        link: 'https://al5five-web.github.io/historia/',
+        description: 'Site criado por Fabrício Alves de Morais com apoio de IA generativa, HTML5, CSS3 e JavaScript.'
+      },
+      {
+        id: 'proj-5',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Gabriel Lucas — Evolução da Informática (Edição 1)',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000802-9aa1f9aa21/Imagem_1DS_Ativid_Evolucao_Informatica_gabriel_lucas.png',
+        link: 'https://gabriellucas0412.github.io/atividade-da-evolu-o-da-informatica/',
+        description: 'Primeira versão do site desenvolvido por Gabriel Lucas sobre a história das máquinas de calcular e computadores modernos.'
+      },
+      {
+        id: 'proj-6',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Leonel Camargo — Meu Site: História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000803-a4e23a4e25/Imagem_1DS_Atividade_leonel-camargo_História da Informática.png',
+        link: 'https://leonel-camargo.github.io/Meu-site/',
+        description: 'Projeto publicado por Leonel Camargo destacando as gerações dos computadores e personalidades históricas.'
+      },
+      {
+        id: 'proj-7',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'João Ricardo — Portal Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000832-0c0c30c0c6/Imagem_1DS_Atividade_joaoricardo_História da Informática.png',
+        link: 'https://joricardinho39-lgtm.github.io/INFORMATICA/',
+        description: 'Site desenvolvido por João Ricardo apresentando a trajetória tecnológica desde o ábaco até a era digital.'
+      },
+      {
+        id: 'proj-8',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluna • 1º DS',
+        title: 'Emily Gobato — Pessoas Históricas da Computação',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000833-b3d03b3d06/Imagem_1DS_Atividade_emilygobato_História da Informática.png',
+        link: 'https://emilygobato.github.io/pessoas-hist-ricas/#historia',
+        description: 'Página elaborada por Emily Gobato com foco nas grandes personalidades que construíram a ciência da computação.'
+      },
+      {
+        id: 'proj-9',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Vinícius Salvador — História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000834-5092650928/Imagem_1DS_Atividade_viniciussalvador_História da Informática.png',
+        link: 'https://panetoneafricano.github.io/Atividade-Historia-Da-Informatica/',
+        description: 'Projeto web publicado por Vinícius Salvador para a disciplina de Introdução à Computação.'
+      },
+      {
+        id: 'proj-10',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Felipe Martins — Evolução da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000835-5f9025f905/Imagem_1DS_Atividade_felipemartins_História da Informática.png',
+        link: 'https://lipemuzzi.github.io/evolucaodainformatica/',
+        description: 'Site desenvolvido por Felipe Martins reunindo marcos históricos, hardware e revolução digital.'
+      },
+      {
+        id: 'proj-11',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluna • 1º DS',
+        title: 'Isabelle Silva — História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000836-7574f75752/Imagem_1DS_Atividade_IA_isabellesilva.png',
+        link: 'https://isabellesilva-spec.github.io/site_Atividade_roberto/',
+        description: 'Página interativa criada por Isabelle Silva utilizando HTML, CSS, JavaScript e ferramentas de IA.'
+      },
+      {
+        id: 'proj-12',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Gabriel Lucas — História e Evolução (Seção Pioneiros)',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000837-ae3a8ae3ab/Imagem_1DS_Atividade_IA_gabriellucas.png',
+        link: 'https://gabriellucas0412.github.io/hist-ria-e-evolu-o-da-inform-tica-2/#pioneiros',
+        description: 'Segunda edição aprimorada do projeto de Gabriel Lucas com destaque especial para os pioneiros da área.'
+      },
+      {
+        id: 'proj-13',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Carlitos Alves — Aula 01: História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000838-2109121094/Imagem_1DS_Atividade_IA_carlitosalves.png',
+        link: 'https://carlitosalves.github.io/Aula-01-Historia-da-informatica/',
+        description: 'Site desenvolvido por Carlitos Alves apresentando os conceitos iniciais de Introdução à Computação.'
+      },
+      {
+        id: 'proj-14',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Vitor Gouveia — Trabalho de Informática & Pioneiros',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000839-34ca134ca3/Imagem_1DS_Atividade_IA_vgouveias.png',
+        link: 'https://vgouveias2025-sudvitor.github.io/trabalho-informatica/#pioneiros',
+        description: 'Página publicada por Vitor Gouveia explorando a evolução dos sistemas computacionais e seus criadores.'
+      },
+      {
+        id: 'proj-15',
+        category: 'projetos',
+        categoryLabel: 'Projeto Dupla • 1º DS',
+        title: 'Drehmacc & Andressa Yamada — Mentes da Computação',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000840-32f2632f28/Imagem_1DS_Atividade_IA_drehmacc-andressayamada.png',
+        link: 'https://drehmacc.github.io/Aula-1/#mentes',
+        description: 'Projeto colaborativo desenvolvido por Drehmacc e Andressa Yamada homenageando grandes mentes da computação.'
+      },
+      {
+        id: 'proj-16',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Pedro Lima Silva — Meu Site: História da Informática',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000841-5100351006/Imagem_1DS_Atividade_IA_pedrolimasilva.png',
+        link: 'https://pedrolimasilva03-png.github.io/meu-site/index.html',
+        description: 'Site publicado por Pedro Lima Silva estruturado com HTML, CSS e JavaScript no GitHub Pages.'
+      },
+      {
+        id: 'proj-17',
+        category: 'projetos',
+        categoryLabel: 'Projeto Aluno • 1º DS',
+        title: 'Raul Nascimento — Personagens da Computação',
+        tag: 'GitHub Pages',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000842-dc4e0dc4e2/Imagem_1DS_Atividade_IA_raulnascimento.png',
+        link: 'https://raulnascimento-spec.github.io/#personagens',
+        description: 'Página interativa criada por Raul Nascimento destacando figuras essenciais na história da tecnologia.'
+      },
+
+      // GUIAS VISUAIS, CHEATSHEETS & ATALHOS (5)
+      {
+        id: 'guia-1',
+        category: 'guias',
+        categoryLabel: 'Produtividade',
+        title: 'Atalhos Essenciais do Teclado no Windows e Editores',
+        tag: 'Infográfico • Atalhos',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000826-4a44f4a451/Imagem_Teclado_Atalhos.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000827-965ab965ad/Imagem_Teclado_Atalhos.png',
+        description: 'Mapa visual com os principais atalhos de teclado para agilizar a navegação, edição de código e produtividade diária.'
+      },
+      {
+        id: 'guia-2',
+        category: 'guias',
+        categoryLabel: 'Prompt Visual IA',
+        title: 'Uso do /CHEATSHEET no ChatGPT — Como funciona o HTML',
+        tag: 'IA • Cheatsheet',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000820-649d6649d8/Imagem_cheatsheet_HTML.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000821-dc76fdc771/Imagem_cheatsheet_HTML.png',
+        description: 'Guia prático de como gerar folhas de consulta rápida (/cheatsheet) ilustradas com Inteligência Artificial para estudar programação.'
+      },
+      {
+        id: 'guia-3',
+        category: 'guias',
+        categoryLabel: 'Prompt Visual IA',
+        title: 'Uso do /BLUEPRINT no ChatGPT — Projeto Visual HTML',
+        tag: 'IA • Blueprint',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000822-45c4845c4b/Imagem_blueprint_projeto-visual_HTML.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000823-f3f91f3f93/Imagem_blueprint_projeto-visual_HTML.png',
+        description: 'Exemplo de diagrama técnico (/blueprint) gerado por IA explicando a arquitetura e estrutura de uma página HTML.'
+      },
+      {
+        id: 'guia-4',
+        category: 'guias',
+        categoryLabel: 'Prompt Visual IA',
+        title: 'Uso do /FLASHCARDS no ChatGPT — Cartões de Estudo HTML',
+        tag: 'IA • Flashcards',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000824-8de258de28/Imagem_flashcards_cartões-de-estudo_HTML.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000825-1f5831f585/Imagem_flashcards_cart%C3%B5es-de-estudo_HTML.png',
+        description: 'Como criar cartões de memorização visuais (/flashcards) com IA para revisar tags HTML e conceitos de desenvolvimento.'
+      },
+      {
+        id: 'guia-5',
+        category: 'guias',
+        categoryLabel: 'Encerramento & IA',
+        title: 'Arte de Agradecimento — Turma 1º DS & Inteligência Artificial',
+        tag: 'Arte • 2026',
+        image: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000844-63c7563c77/Imagem_final_agragradecimento_IA.png',
+        link: 'https://0fef157bd1.clvaw-cdnwnd.com/28415591c0719e07053df1ac85864a9d/200000845-1c6cb1c6ce/Imagem_final_agragradecimento_IA.png',
+        description: 'Ilustração comemorativa das atividades desenvolvidas pela turma do 1º Desenvolvimento de Sistemas em 2026.'
+      }
+    ];
+
+    // STATE
+    let savedIds = JSON.parse(localStorage.getItem('tecfacflix_my_list') || '[]');
+    let currentModalItem = null;
+
+    // DOM ELEMENTS
+    const navbar = document.getElementById('navbar');
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+    const searchSection = document.getElementById('searchSection');
+    const searchGrid = document.getElementById('searchGrid');
+    const searchTermDisplay = document.getElementById('searchTermDisplay');
+    const catalogContainer = document.getElementById('catalogContainer');
+    const filterPills = document.querySelectorAll('.filter-pill');
+    const savedCounterLabel = document.getElementById('savedCounterLabel');
+    const heroMyListBtn = document.getElementById('heroMyListBtn');
+
+    // MODAL ELEMENTS
+    const detailModal = document.getElementById('detailModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const modalImg = document.getElementById('modalImg');
+    const modalCategory = document.getElementById('modalCategory');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBadge = document.getElementById('modalBadge');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalOpenLink = document.getElementById('modalOpenLink');
+    const modalToggleListBtn = document.getElementById('modalToggleListBtn');
+    const modalCopyLinkBtn = document.getElementById('modalCopyLinkBtn');
+    const toast = document.getElementById('toast');
+
+    // NAVBAR SCROLL EFFECT
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // TOAST HELPER
+    let toastTimer;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+
+    // CREATE CARD ELEMENT
+    function createCardElement(item) {
+      const card = document.createElement('article');
+      card.className = 'card' + (savedIds.includes(item.id) ? ' in-list' : '');
+      card.dataset.id = item.id;
+
+      card.innerHTML = `
+        <div class="card-thumb-wrap">
+          <img class="card-thumb" src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMG}';" />
+          <span class="card-type-badge">${item.categoryLabel}</span>
+          <span class="card-saved-dot">✓ Salvo</span>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">${item.title}</h3>
+          <div class="card-meta">
+            <span class="card-tag">${item.tag}</span>
+            <span>Ver detalhes ›</span>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => openModal(item));
+      return card;
+    }
+
+    // RENDER ALL ROWS
+    function renderCatalog() {
+      const categories = ['apostilas', 'pioneiros', 'projetos', 'guias'];
+      categories.forEach(cat => {
+        const track = document.getElementById(`track-${cat}`);
+        const countEl = document.getElementById(`count-${cat}`);
+        const items = catalogItems.filter(i => i.category === cat);
+        track.innerHTML = '';
+        items.forEach(item => track.appendChild(createCardElement(item)));
+        if (countEl) countEl.textContent = items.length;
+      });
+
+      renderMyList();
+    }
+
+    // RENDER MY LIST ROW
+    function renderMyList() {
+      const row = document.getElementById('row-minha-lista');
+      const track = document.getElementById('track-minha-lista');
+      const countEl = document.getElementById('count-minha-lista');
+
+      savedCounterLabel.textContent = `Minha Lista (${savedIds.length})`;
+
+      if (savedIds.includes('ap-1b')) {
+        heroMyListBtn.textContent = '✓ Na Minha Lista';
+      } else {
+        heroMyListBtn.textContent = '+ Minha Lista';
+      }
+
+      if (savedIds.length === 0) {
+        row.classList.add('hidden');
+        track.innerHTML = '';
+        return;
+      }
+
+      row.classList.remove('hidden');
+      countEl.textContent = savedIds.length;
+      track.innerHTML = '';
+
+      savedIds.forEach(id => {
+        const item = catalogItems.find(i => i.id === id);
+        if (item) track.appendChild(createCardElement(item));
+      });
+    }
+
+    // TOGGLE SAVE IN MY LIST
+    function toggleMyList(itemId) {
+      const idx = savedIds.indexOf(itemId);
+      if (idx === -1) {
+        savedIds.unshift(itemId);
+        showToast('✓ Adicionado à Minha Lista!');
+      } else {
+        savedIds.splice(idx, 1);
+        showToast('Removido da Minha Lista.');
+      }
+      localStorage.setItem('tecfacflix_my_list', JSON.stringify(savedIds));
+      renderCatalog();
+
+      if (searchInput.value.trim() !== '') {
+        handleSearch(searchInput.value);
+      }
+
+      if (currentModalItem && currentModalItem.id === itemId) {
+        updateModalListBtn(itemId);
+      }
+    }
+
+    function updateModalListBtn(itemId) {
+      if (savedIds.includes(itemId)) {
+        modalToggleListBtn.textContent = '✓ Na Minha Lista (Remover)';
+      } else {
+        modalToggleListBtn.textContent = '+ Adicionar à Minha Lista';
+      }
+    }
+
+    // CAROUSEL HORIZONTAL SCROLL
+    window.scrollCarousel = function(trackId, direction) {
+      const track = document.getElementById(trackId);
+      if (!track) return;
+      const scrollAmount = Math.max(track.clientWidth * 0.78, 300);
+      track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    };
+
+    // MODAL CONTROLS
+    function openModal(item) {
+      currentModalItem = item;
+      modalImg.src = item.image;
+      modalImg.onerror = () => { modalImg.src = FALLBACK_IMG; };
+      modalCategory.textContent = item.categoryLabel;
+      modalTitle.textContent = item.title;
+      modalBadge.textContent = item.tag;
+      modalDesc.textContent = item.description;
+      modalOpenLink.href = item.link;
+      updateModalListBtn(item.id);
+      detailModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      detailModal.classList.remove('open');
+      document.body.style.overflow = '';
+      currentModalItem = null;
+    }
+
+    closeModalBtn.addEventListener('click', closeModal);
+    detailModal.addEventListener('click', (e) => {
+      if (e.target === detailModal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && detailModal.classList.contains('open')) closeModal();
+    });
+
+    modalToggleListBtn.addEventListener('click', () => {
+      if (currentModalItem) toggleMyList(currentModalItem.id);
+    });
+
+    modalCopyLinkBtn.addEventListener('click', () => {
+      if (!currentModalItem) return;
+      navigator.clipboard.writeText(currentModalItem.link).then(() => {
+        showToast('🔗 Link copiado para a área de transferência!');
+      }).catch(() => {
+        showToast('Não foi possível copiar automaticamente.');
+      });
+    });
+
+    // HERO MY LIST BUTTON
+    heroMyListBtn.addEventListener('click', () => toggleMyList('ap-1b'));
+
+    // PROFILE STATS CLICK -> SCROLL TO MY LIST
+    document.getElementById('profileStatsBtn').addEventListener('click', () => {
+      if (savedIds.length === 0) {
+        showToast('Sua lista está vazia. Clique em qualquer card para salvar!');
+      } else {
+        document.getElementById('row-minha-lista').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // CATEGORY FILTER PILLS
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const selected = pill.dataset.filter;
+        const rows = document.querySelectorAll('.row-section[data-category]');
+        rows.forEach(row => {
+          if (selected === 'all' || row.dataset.category === selected) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // REAL-TIME SEARCH
+    function handleSearch(rawQuery) {
+      const q = rawQuery.trim().toLowerCase();
+      if (!q) {
+        clearSearch.classList.remove('visible');
+        searchSection.classList.remove('active');
+        catalogContainer.style.display = 'block';
+        return;
+      }
+
+      clearSearch.classList.add('visible');
+      catalogContainer.style.display = 'none';
+      searchSection.classList.add('active');
+      searchTermDisplay.textContent = `"${rawQuery.trim()}"`;
+
+      const matches = catalogItems.filter(item =>
+        item.title.toLowerCase().includes(q) ||
+        item.description.toLowerCase().includes(q) ||
+        item.categoryLabel.toLowerCase().includes(q) ||
+        item.tag.toLowerCase().includes(q)
+      );
+
+      searchGrid.innerHTML = '';
+      if (matches.length === 0) {
+        searchGrid.innerHTML = `<p style="color:#b3b3b3; grid-column: 1/-1; padding: 20px 0;">Nenhum material encontrado para "${rawQuery.trim()}".</p>`;
+      } else {
+        matches.forEach(item => searchGrid.appendChild(createCardElement(item)));
+      }
+    }
+
+    searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
+    clearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      handleSearch('');
+      searchInput.focus();
+    });
+
+    // INITIALIZE
+    renderCatalog();
+  </script>
+</body>
+</html>
